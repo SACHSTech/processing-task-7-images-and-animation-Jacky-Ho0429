@@ -1,36 +1,69 @@
 import processing.core.PApplet;
+import processing.core.PImage;
 
 public class Sketch extends PApplet {
-	
-	
-  /**
-   * Called once at the beginning of execution, put your size all in this method
-   */
+
+  // PImages
+  PImage sprite1;
+  PImage background1;
+
+  // Floats
+  float fltAngle = 0;
+  float fltRadius = 100;
+  float fltCircleX = 25;
+  float fltCircleY = 25;
+  float fltCircleSpeedX = 4;
+  float fltCircleSpeedY = 2;
+  float fltCircleSize = width / 16;
+
+  // Integers
+  int intGhostSize = 50;
+
   public void settings() {
-	// put your size call here
     size(400, 400);
   }
 
-  /** 
-   * Called once at the beginning of execution.  Add initial set up
-   * values here i.e background, stroke, fill etc.
-   */
   public void setup() {
-    background(210, 255, 173);
+    // Loads and resizes images
+    sprite1 = loadImage("OIG-removebg-preview.png");
+    background1 = loadImage("background.jpg");
+    sprite1.resize(intGhostSize, intGhostSize);
+    background1.resize(400, 400);
   }
 
-  /**
-   * Called repeatedly, anything drawn to the screen goes here
-   */
   public void draw() {
-	  
-	// sample code, delete this stuff
-    stroke(128);
-    line(150, 25, 270, 350);  
+    // Sets background to loaded image
+    image(background1, 0, 0);
 
-    stroke(255);
-    line(50, 125, 70, 50);  
+    // Makes a ghost go in circles
+    float fltGhostX = width / 2 + cos(fltAngle) * fltRadius - 25;
+    float fltGhostY = height / 2 + sin(fltAngle) * fltRadius - 25;
+
+    image(sprite1, fltGhostX, fltGhostY);
+
+    fltAngle += 0.05; 
+    
+    // Reset angles of circle
+    if (fltAngle > TWO_PI) {
+      fltAngle = 0;
+    }
+
+    // Creates a bouncing ball
+    ellipse(fltCircleX, fltCircleY, width / 16, height / 16);
+
+    fltCircleX += fltCircleSpeedX;
+    fltCircleY += fltCircleSpeedY;
+
+    // Check for collisions with the screen edges
+    if (fltCircleX < 20 || fltCircleX > width - width / 20) {
+      fltCircleSpeedX *= -1; 
+
+    }
+    
+    if (fltCircleY < 25 || fltCircleY > height - width / 20) {
+      fltCircleSpeedY *= -1; 
+    }
   }
   
-  // define other methods down here.
+  // Define other methods down here.
 }
